@@ -6,3 +6,8 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+/.name
+/12.05.25.iml
+/editor.xml
+/misc.xml
+/modules.xml
