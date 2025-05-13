@@ -17,6 +17,8 @@ public:
 	void setInt(const std::string& name, int value) const;
 	void setFloat(const std::string& name, float value) const;
 
+	[[nodiscard]] unsigned int getID() const { return ID; }
+
   private:
 	unsigned int ID;
 

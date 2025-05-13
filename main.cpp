@@ -1,5 +1,5 @@
-#include <iostream>
 #include "Shader.hpp"
+#include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,9 +14,10 @@ void processInput(GLFWwindow* window);
 constexpr auto SCR_WIDTH  = 800;
 constexpr auto SCR_HEIGHT = 600;
 
-constexpr auto VERTEX_SHADER_PATH	= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/shader.fs";
-constexpr auto FRAGMENT_SHADER_PATH = "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/shader.fs";
-constexpr auto TEXTURE_PATH			= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/textures/0.jpg";
+constexpr auto VERTEX_SHADER_PATH	= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/vertexShader.vs";
+constexpr auto FRAGMENT_SHADER_PATH = "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/fragmentShader.fs";
+constexpr auto TEXTURE_PATH1		= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/textures/wooden_container.jpg";
+constexpr auto TEXTURE_PATH2		= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/textures/awesomeface.png";
 
 int main()
 {
@@ -49,7 +50,7 @@ int main()
 	}
 
 	// Компилирование нашей шейдерной программы
-	const Shader shaderProg(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
+	const Shader shaderProgram(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 
 	// Указание вершин (и буфера(ов)) и настройка вершинных атрибутов
 	constexpr float vertices[] = {
@@ -91,23 +92,27 @@ int main()
 	glEnableVertexAttribArray(2);
 
 	// Загрузка и создание текстуры
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture); // все последующие GL_TEXTURE_2D-операции теперь будут влиять на данный
-										   // текстурный объект
+	unsigned int texture1, texture2;
+
+	// Текстура №1 - Деревянный ящик
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	// Установка параметров наложения текстуры
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // установка метода наложения текстуры GL_REPEAT
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // (стандартный метод наложения)
+																  // (стандартный метод наложения)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Установка параметров фильтрации текстуры
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Загрузка изображения, создание текстуры и генерирование мипмап-уровней
-	int			   width, height, nrChannels;
-	unsigned char* data = stbi_load(TEXTURE_PATH, &width, &height, &nrChannels, 0);
-	if (data ==	nullptr)
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true); // указываем stb_image.h на то, чтобы перевернуть для загруженной текстуры
+											// ось y
+	unsigned char* data = stbi_load(TEXTURE_PATH1, &width, &height, &nrChannels, 0);
+	if (data == nullptr)
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
@@ -115,6 +120,39 @@ int main()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(data);
+
+	// Текстура №2 - Смайлик
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	// Установка параметров наложения текстуры
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // установка метода наложения текстуры GL_REPEAT
+																  // (стандартный метод наложения)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Установка параметров фильтрации текстуры
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Загрузка изображения, создание текстуры и генерирование мипмап-уровней
+	data = stbi_load(TEXTURE_PATH2, &width, &height, &nrChannels, 0);
+	if (data == nullptr)
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	// Файл awesomeface.png имеет альфа-канал (прозрачность), поэтому необходимо использовать пераметр GL_RGBA
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
+
+	// Указываем OpenGL, какой сэмплер к какому текстурному блоку принадлежит (это нужно сделать единожды)
+	shaderProgram.use(); // не забудьте активировать шейдер перед настройкой uniform-переменных!
+	// Устанавливаем вручную…
+	//glUniform1i(glGetUniformLocation(shaderProgram.getID(), "texture1"), 0);
+	// …или с помощью шейдерного класса
+	shaderProgram.setInt("texture1", 0);
+	shaderProgram.setInt("texture2", 1);
 
 	// Цикл рендеринга
 	while (!glfwWindowShouldClose(window))
@@ -126,15 +164,18 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Связывание текстуры
-		glBindTexture(GL_TEXTURE_2D, texture);
+		// Привязка текстур к соответствующим текстурным юнитам
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		// Рендеринг ящика
-		shaderProg.use();
+		shaderProgram.use();
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		// Glfw: обмен содержимым front- и back-буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена
+		// glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена
 		// кнопка, перемещен курсор мыши и т.п.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
