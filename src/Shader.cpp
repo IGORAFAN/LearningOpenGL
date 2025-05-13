@@ -1,10 +1,8 @@
-#include "../include/Shader.hpp"
-
 #include <glad/glad.h>
-
+#include "Shader.hpp"
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
@@ -48,13 +46,13 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 	// Вершинный шейдер
 	vertex = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex, 1, &vShaderCode, nullptr);
+	glShaderSource(vertex, 1, &vShaderCode, NULL);
 	glCompileShader(vertex);
 	checkCompileErrors(vertex, "VERTEX");
 
 	// Фрагментный шейдер
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment, 1, &fShaderCode, nullptr);
+	glShaderSource(fragment, 1, &fShaderCode, NULL);
 	glCompileShader(fragment);
 	checkCompileErrors(fragment, "FRAGMENT");
 
@@ -99,7 +97,7 @@ void Shader::checkCompileErrors(const unsigned int shader, const std::string& ty
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
 			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
 					  << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
 		}
@@ -109,7 +107,7 @@ void Shader::checkCompileErrors(const unsigned int shader, const std::string& ty
 		glGetProgramiv(shader, GL_LINK_STATUS, &success);
 		if (!success)
 		{
-			glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
+			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
 			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
 					  << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
 		}
