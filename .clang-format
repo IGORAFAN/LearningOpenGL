@@ -1,0 +1,86 @@
+# clang-format configuration for more precise styling controls
+
+# General style foundation
+BasedOnStyle: Microsoft
+
+# Indentation controls
+IndentWidth: 4            # Number of spaces for each level of indentation
+TabWidth: 4               # Width of tab for alignment (not used as tabs are disabled)
+UseTab: Always             # Do not use tabs (use spaces instead)
+
+# Maximal line width
+ColumnLimit: 120          # Maximum allowed characters per line
+
+# Include sorting
+SortIncludes: CaseInsensitive        # Sort header files alphabetically within groups
+IncludeBlocks: Preserve   # Preserve logical include groups
+
+# Alignment and spacing
+AlignTrailingComments: true            # Align comments to the same column
+AlignConsecutiveAssignments: true      # Align `=` in consecutive assignments
+AlignConsecutiveDeclarations: true     # Align variable declarations
+AlignOperands: true                    # Align operands in multi-line expressions
+AlignAfterOpenBracket: DontAlign       # Do not horizontally align arguments after an open bracket
+
+# How to break functions and templates
+AlwaysBreakTemplateDeclarations: Yes   # Always break template declarations onto new lines
+AllowShortFunctionsOnASingleLine: None # Never allow shortening functions to a single line
+AllowAllParametersOfDeclarationOnNextLine: true
+
+
+# Brace wrapping rules
+BreakBeforeBraces: Allman              # Keep opening braces on the same line
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true          # Place braces on a new line after `if`, `while`, `for`, etc.
+  AfterFunction: true
+  AfterNamespace: true
+  BeforeCatch: true                    # Place catch braces on a new line
+  BeforeElse: true                     # Place `else` after a closing brace on the same line
+
+# Control statement formatting
+SpaceBeforeParens: ControlStatements   # Add space before parentheses in control statements
+AllowShortIfStatementsOnASingleLine: false # Always split `if` statements into separate lines
+AllowShortCaseLabelsOnASingleLine: false   # Prevent single-line case labels in `switch`
+
+# Pointer style
+PointerAlignment: Left                 # Align pointers and references (*, &) to the left of the type
+
+# Function and parameter formatting
+BinPackArguments: false                # Keep each function argument on its own line if it doesn't fit
+BinPackParameters: false               # Parameter packing disabled for better readability
+
+# Spacing settings
+SpacesInParentheses: false             # No spaces inside parentheses
+SpaceAfterCStyleCast: true             # Add a space after a cast like (int)
+
+# Line-breaking for binary operators
+BreakBeforeBinaryOperators: NonAssignment # Break lines before operators, but not equals (`=`)
+BreakStringLiterals: true                  # Allow breaking long string literals
+ContinuationIndentWidth: 8                 # Indent width for line continuations
+
+# Namespace formatting
+CompactNamespaces: false                  # Do not use compact `namespace {}`
+NamespaceIndentation: None                # Do not add additional indent for namespaces
+EmptyLineBeforeAccessModifier: Always     # Add an empty line before public/protected/private
+
+# Additional checks for readability
+ReflowComments: true                      # Adjust comment lines to fit the line width
+PenaltyBreakComment: 10                   # Value for penalizing broken comments during formatting
+FixNamespaceComments: false               # Avoid adding comments after namespaces (e.g. `// namespace X`)
+
+# Custom formatting for lambdas
+LambdaBodyIndentation: Signature          # Indent lambda according to declaration signature
+IndentWrappedFunctionNames: false         # Avoid additional indentation for wrapped function declarations
+
+# Arrays and initializer lists
+AlwaysBreakAfterReturnType: None          # Avoid breaking after return type of a function
+AlwaysBreakBeforeMultilineStrings: false  # Prevent breaking multiline strings on their own line
+Cpp11BracedListStyle: true                # Use modern braced initializer lists formatting for C++11 and higher
+
+# Extra penalties and styling
+PenaltyBreakBeforeFirstCallParameter: 0  # Penalty for breaking before first argument in a function
+PenaltyExcessCharacter: 100               # Penalty for exceeding max character limit
+PenaltyReturnTypeOnItsOwnLine: 1000       # Strong penalty for placing return types on their own line
+PenaltyBreakString: 1                     # Entries like "long_string + ..." split more easily
+
