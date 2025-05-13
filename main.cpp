@@ -32,7 +32,7 @@ int main()
 
 	// glfw: создание окна
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL for Ravesli.com", NULL, NULL);
-	if (window == NULL)
+	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -98,8 +98,7 @@ int main()
 
 	// Установка параметров наложения текстуры
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // установка метода наложения текстуры GL_REPEAT
-																  // (стандартный метод наложения)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // (стандартный метод наложения)
 
 	// Установка параметров фильтрации текстуры
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -108,7 +107,7 @@ int main()
 	// Загрузка изображения, создание текстуры и генерирование мипмап-уровней
 	int			   width, height, nrChannels;
 	unsigned char* data = stbi_load(TEXTURE_PATH, &width, &height, &nrChannels, 0);
-	if (!data)
+	if (data ==	nullptr)
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
@@ -133,9 +132,9 @@ int main()
 		// Рендеринг ящика
 		shaderProg.use();
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		// glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена
+		// Glfw: обмен содержимым front- и back-буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена
 		// кнопка, перемещен курсор мыши и т.п.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
