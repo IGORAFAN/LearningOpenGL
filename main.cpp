@@ -14,8 +14,8 @@ void processInput(GLFWwindow* window);
 constexpr auto SCR_WIDTH  = 800;
 constexpr auto SCR_HEIGHT = 600;
 
-constexpr auto VERTEX_SHADER_PATH	= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/vertexShader.vs";
-constexpr auto FRAGMENT_SHADER_PATH = "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/fragmentShader.fs";
+constexpr auto VERTEX_SHADER_PATH	= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/vertexShader.glsl";
+constexpr auto FRAGMENT_SHADER_PATH = "S:/Projects/OpenGL/OpenGL_12.05.25/resources/shadersSources/fragmentShader.glsl";
 constexpr auto TEXTURE_PATH1		= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/textures/wooden_container.jpg";
 constexpr auto TEXTURE_PATH2		= "S:/Projects/OpenGL/OpenGL_12.05.25/resources/textures/awesomeface.png";
 
